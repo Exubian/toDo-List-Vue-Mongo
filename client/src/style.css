@@ -1,0 +1,238 @@
+@import '/node_modules/materialize-css/dist/css/materialize.min.css';
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  /* place-items: center; */
+  min-width: 624px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid #444444;
+  padding: 0.4em 0.3em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+  background-color: #acb9c4;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  min-width: 640px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #e5e5e5;
+  }
+}
+/* ------------------------------------------ */
+ input.new-todo{
+  min-width: 300px;
+  min-height: 24px;
+}
+.remove-button {
+  position: relative;
+  top: 0.3em;
+  padding: 5px 5px 4px 6px;
+  margin-left: 5px;  
+  /* width: 24px;
+  height: 24px; */
+  border: none;
+  border-radius: 50%;
+  color: #3e0707;
+  background-color: #e45858;
+}
+.remove-button:hover {
+  background-color: crimson;
+}
+.project-actions>button {
+  left: 35%;
+
+}
+
+.projectAR{
+  padding: 7px 10px 7px 10px;
+  
+  border: 1px solid #968914;
+}
+
+.project-title.editing {
+  display: none;
+}
+
+.edit.proj {
+  width: 60%;
+}
+.edit-cycle {
+  display: inline-block;
+}
+
+.edit {
+  width: 80%;
+  height: 24px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  background-color: unset;
+  position: relative;
+}
+
+.simple-item {
+  text-align: left;
+}
+.item-title {
+  /* min-width: 20px; */
+  margin: 0 5px 0 5px;
+}
+
+/* Стиль для выпадающего меню */
+/* .menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+} */
+/* .dropdown-menu {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+} */
+
+/* Стиль для элементов внутри меню */
+/* .dropdown-menu li  {
+  padding: 5px;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.dropdown-menu li:last-child  {
+  padding: 5px 5px 6px 5px;
+  border-bottom: unset;
+} */
+
+/* Стиль для кнопок внутри меню */
+/* .dropdown-menu li button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+} */
+
+/* Стиль для кнопок при наведении */
+/* .dropdown-menu li:hover {
+  background-color: #eaeaea;
+} */
+
+/* button {
+  position: relative;
+} */
+
+input.toggle {
+  width: 25px;
+  height: 25px;
+}
+.toggle-button {
+  padding: 5px 9px 8px 10px;
+}
+/* .projectAR { 
+  font-weight: bold;
+} */
+/* селектор на последнюю букву*/
+
+/* .project-title {
+  position: relative;
+} */
+.exit-left{
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  border-radius: 1rem;
+  padding: 1em 0.5em;
+  background-color: #ff0000;
+  font-weight: 600;
+}
+.debug-t {
+  position: relative;
+  left: 0;
+}
+
+
