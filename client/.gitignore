@@ -27,6 +27,9 @@ package-lock.json
 src/assets/
 public/
 # /*.json
+client/src/components/glob/Settings.vue
+client/src/stores/settings.js
+client/src/plugins/messagePlugin.js
 
 windowResize.js
 firebase.js

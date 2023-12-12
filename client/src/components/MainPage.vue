@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div class="current-user"> {{ UId || '{anonymys}' }} </div>
+    <NavBar></NavBar>
     <h2>Вже не Дуже паскудний планувальник завдань</h2>
-    <button class="exit" @click="logout">Выйти</button>
     <button hidden @click="upgradeFields(items, 'id','level','title','completed','prevCompleted','repeat','dueDate','subItems')">upgFiel</button>
     <button 
       @click="getUserData(UId)">
@@ -51,7 +50,7 @@ const filters = {
 
 import TreeItem from './subcomponents/TreeItem.vue';
 import { useStructure } from '/src/stores/list';
-import { logout } from '/src/plugins/auth';
+import { useAuth } from '@/stores/auth';
 import axios from 'axios';
 
 
@@ -179,7 +178,7 @@ export default {
     },
     
     logout() {
-      logout();
+      useAuth().logout();
     }
 
   },
@@ -210,7 +209,7 @@ export default {
     font-weight: bold;
   }
 
-  .exit {
+  /* .exit {
     position: absolute;
     top: 50px;
     right: 5px;
@@ -218,7 +217,7 @@ export default {
     padding: 1em 0.5em;
     background-color: #ff0000;
     font-weight: 600;
-  }
+  } */
   .exit:hover{
     background-color: #fb0c0c;
   }

@@ -2,52 +2,59 @@
   <nav class="navbar orange lighten-1">
     <div class="nav-wrapper">
       <div class="navbar-left">
-        <a href="#" @click.prevent="$emit('click')">
+        <!-- <a href="" @click.prevent="$emit('click')">
           <i class="material-icons black-text">dehaze</i>
-        </a>
-        <span class="black-text">{{date | date('datetime')}}</span>
+        </a> -->
+        <span class="black-text">{{ $filters.dateFilter(date, 'datetime') }}</span>
       </div>
 
       <ul class="right hide-on-small-and-down">
         <li>
           <a class="dropdown-trigger black-text"
-            href="#" data-target="dropdown" ref="dropdown"
+            href="" data-target="dropdown" ref="dropdown"
           >
-          {{ store.UId || '{anonymys}' }}
+          {{ UId || '{anonymys}' }}
             <i class="material-icons right">arrow_drop_down</i>
-          </a>
+          </a>  
 
           <ul id='dropdown' class='dropdown-content'>
+            
             <li>
-              <router-link to="/profile" class="black-text">
-                <i class="material-icons">account_circle</i>Профиль
-              </router-link>
-            </li>
-            <li class="divider" tabindex="-1"></li>
-            <li>
-              <a href="#" class="black-text" @click.prevent="logout">
+              <a href="" @click.prevent="logout">
                 <i class="material-icons">assignment_return</i>Выйти
               </a>
             </li>
+
           </ul>
         </li>
       </ul>
     </div>
   </nav>
 </template>
-<!-- <button class="exit" @click="logout">Выйти</button> -->
 
 <script>
+import { useAuth } from "@/stores/auth"
+import { useStructure } from "@/stores/list";
+
 export default {
-  data: () => ({
-    date: new Date(),
-    interval: null,
-    dropdown: null,
-  }),
+  name: 'NavBar',
+  data() {
+    return{
+      date: new Date(),
+      interval: null,
+      dropdown: null,
+    }
+  },
+  computed: {
+    UId() {
+      return useStructure().uid;
+    }
+  },
   methods: {
     logout() {
-      console.log('Logout')
-      this.$router.push('/login?message=logout')
+      useAuth().logout();
+      console.log('Log out')
+      // this.$router.push('/login?message=logout')
     }
   },
   mounted() {
@@ -75,7 +82,7 @@ export default {
     width: 100%;
     height: 64px !important;
     padding: 0 2rem;
-    z-index: 1000;
+    z-index: 1;
   }
   .nav-wrapper,
   .navbar-left {
@@ -85,6 +92,19 @@ export default {
   }
   .navbar-left>a {
     margin-right: 1rem
+  }
+  .right.hide-on-small-and-down {
+    position: absolute;
+    right: 0;
+  }
+  .black-text{
+    font-weight: 600;
+  }
+  .exit {
+    background-color: #ff0000;
+    border-radius: 1rem;
+    padding: 1em 0.5em;
+    font-weight: 600;
   }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
   <button @click="logout"
-    class="exit">Выйти
+    class="exit" hidden>Выйти
   </button>
   <form class="card auth-card" @submit.prevent="submitHandler">
     <div class="card-content">
@@ -63,7 +63,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import {email, required, minLength} from '@vuelidate/validators';
-import { login, logout } from "/src/plugins/auth";
+import { useAuth } from "@/stores/auth";
 
 export default {
   name:"Login",
@@ -95,14 +95,14 @@ export default {
       }
       this.isSend = true;
       
-        login(formData).then((val) => {
+        useAuth().login(formData).then((val) => {
           this.isSend = false;
         })
         
         
     },
     logout() {
-      logout()
+      useAuth().logout()
     }
   },
   validations() {
@@ -115,7 +115,7 @@ export default {
     return { v$: useVuelidate() };
   },
   mounted(){
-    document.querySelector('body').style.backgroundColor='#7e7e7e'
+    document.body.style.backgroundColor='#7e7e7e'
   }
 }
 </script>

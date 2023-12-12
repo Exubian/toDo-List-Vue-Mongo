@@ -7,7 +7,7 @@ import MainPage from '@/components/MainPage.vue';
 import { useStructure } from '@/stores/list';
 
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
-import { fetchDataFromFirebase, fetchDataFromMongo } from '@/plugins/auth';
+import { useAuth } from '@/stores/auth';
 
 export default {
   components: {
@@ -26,7 +26,7 @@ export default {
       if (user) {
         // Пользователь аутентифицирован
         this.loading = true;
-        fetchDataFromMongo(user.uid)
+        useAuth().fetchDataFromMongo(user.uid)
         .then(() => {
           this.user = user.uid; this.loading = false;
         }).catch( () => { this.loading = false; } )

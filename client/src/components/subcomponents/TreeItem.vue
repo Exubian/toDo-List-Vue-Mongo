@@ -7,7 +7,7 @@
         @change="updateCompletedStatus(items)"
       />
       
-      <span class="with-gap" @click="editItem(items)" @dblclick="editItem(items)">{{ items.title }}</span>
+      <span class="" @click="editItem(items)" @dblclick="editItem(items)">{{ items.title }}</span>
       <TaskMenu type="main" :underItem="underItem" :i="index" 
         :isOpen="isOpen" :menuItems="menuItems" @toggle="toggle" 
         @remove-project="removeProject"
@@ -60,7 +60,7 @@
     L {{ items.level }}
     <input class="toggle" type="checkbox" v-model="items.completed" 
       @change="updateCompletedStatus(items)"/>
-    <span class="item-title with-gap" v-show="!isItemEdit" @click="editItem(items, 'isItemEdit')"
+    <span class="item-title " v-show="!isItemEdit" @click="editItem(items, 'isItemEdit')"
       @dblclick="editItem(items, 'isItemEdit')">{{items.title || '...'}}
     </span>
     <input v-if="isItemEdit"
@@ -156,6 +156,7 @@ export default {
       isElemMenu: false,
       isEditDate: false,
       isEditCycle: false,
+      isAddingSub: false,
       // isRepeat: ['once', 'repeat'],
       repeatStatuses: repeatStatuses
     };

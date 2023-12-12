@@ -5,6 +5,7 @@ import './style.css';
 import '/src/plugins/functions.js'
 import App from './App.vue';
 import components from '@/components/glob'
+import dateFilter from '@/filters/dateFilter'
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -23,6 +24,7 @@ components.forEach(compon => {
   app.component(compon.name, compon)
 });
 app.config.globalProperties.$auth = auth;
+app.config.globalProperties.$filters = {dateFilter};
 app.mount('#app');
 
 onAuthStateChanged(auth, (user) => {

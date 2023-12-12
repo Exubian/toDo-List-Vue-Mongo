@@ -107,7 +107,7 @@ export default {
 }
 .menu-content {
   left: 15px;
-  width: 98.9%;
+  width: 100%;
   height: 105%;
   background-color: #feebeb;
   border: 1px solid black;

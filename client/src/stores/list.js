@@ -9,24 +9,13 @@ export const useStructure = defineStore("structure", {
     count: 0,
     items: [],
     uid: getAuth().currentUser?.uid,
-    info: null,
-    // itmsFetch: fetchDataFromFirebase() || []
-    
+    info: null,    
   }),
-  // getters: {
-  //   UId() {
-  //     let uid = getAuth().currentUser.uid;
-  //     return uid;
-  //   }
-  // },
   actions: {
     setItems(newItems) {
       this.items = newItems;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
     },
-    // sI(Itm) {
-    //   this.itmsFetch=Itm;
-    // },
     getUid() {
       const user = getAuth().currentUser;
       return user ? user.uid : null;
