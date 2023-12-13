@@ -1,47 +1,40 @@
 <template>
-  <div v-if="type=='main' && !menuItems?.[0]?.editing" class="main-buttons">
+  <div v-if="type=='main' && !isAddingSub" class="main-buttons">
     <button class="toggle-button" @click="$emit('toggle', true)">{{ isOpen ? '▽' : '▶' }}</button>
     <button class="remove-button" @click="$emit('removeProject', underItem, i)">
       <i class="small material-icons">clear</i>
     </button>
-    
-  </div>
-  
-  <div v-if="type=='menu' && !menuItems?.[0]?.editing" class="menu-buttons">
-    <button @click="$emit('toggle', '','isTitleMenu', $event)" ref="titleMenuButton">
+    <button @click="$emit('toggle', '','isTaskMenuOpen', $event)">
       ︙
-    </button>
+    </button>    
   </div>
 
-  <div class="task-info-menu" v-if="isTitleMenu&&type=='menu'" 
-  @click.stop="$emit('toggle', '','isTitleMenu')"   >
+  <div class="task-info-menu" v-if="isTaskMenuOpen" 
+  @click.stop="$emit('toggle', '','isTaskMenuOpen')"   >
     <div class="menu-content" @click.stop> 
       <span class="item-title">{{ items.title }}</span>
-      <button v-for="button in menuItems" :key="button.label" @click.stop="$emit('on-item-click', button)">
+      <TaskProperties @done-edit="doneE" @cansel-edit="canselE" @add-sub="addS" @c-a="cA" />
+      <button v-for="button in menuItems" :key="button.label" @click.stop="button.action">
         {{ button.label }}
       </button>
     </div>
   </div>
-  <div class="task-info-menu" v-if="isItemMenu&&type=='item'" 
-  @click.stop="$emit('toggle', '','isItemMenu')"    >
+  <!-- <div class="task-info-menu" v-if="isTaskMenuOpen&&type=='item'" 
+  @click.stop="$emit('toggle', '','isTaskMenuOpen')"   >
     <div class="menu-content" @click.stop>
       <span class="item-title">{{ items.title }}</span>
-      <button @click.stop="$emit('date-edit', items, 'isEditDate')">
-        {{ items.dueDate || "Установить Дату" }}
-      </button>
-      <button @click.stop="$emit('cycle-edit', items, 'isEditCycle')">
-        {{ items.repeat || "Повторять" }}
+      <button v-for="button in menuItems" :key="button.label" @click.stop="button.action">
+        {{ button.label }}
       </button>
     </div>
-  </div>
+  </div> -->
 
   <div v-if="type=='item'" class="item">
     <button class="projectAR" @click="$emit('add-item', items, 'titleSubEl')">+</button>
     <button @click="$emit('remove-item', underItem, i)" class="remove-button">
       <i class="small material-icons">clear</i>
     </button>
-    <button @click="$emit('toggle', '','isItemMenu', $event)" 
-      > <!--@blur="toggle('','isItemMenu')"-->
+    <button @click="$emit('toggle', '','isTaskMenuOpen', $event)">
       ︙
     </button>
     
@@ -49,9 +42,12 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import TaskProperties from './TaskProperties.vue';
 
 export default {
   name: 'TaskMenu',
+  components: { TaskProperties },
   props: {
     type: {
       type: String,
@@ -66,31 +62,57 @@ export default {
     isOpen:{
       type: Boolean
     },
-    isTitleMenu: {
-      type: Boolean
-    },
-    isItemMenu: {
+    isTaskMenuOpen: {
       type: Boolean
     },
     menuPosition: {
       type: Object
     },
-    menuItems: {
-      type: Array
+    isAddingSub: {
+      type: Boolean
     },
     items: {
       type: Object
     }
   },
-  emits: ['toggle', 'removeProject', 'on-item-click', 'add-item', 'remove-item', 
-    'date-edit', 'cycle-edit'
+  emits: ['toggle', 'remove-project', 'menu-change', 'add-item', 'remove-item', 
+    'date-edit', 'cycle-edit', 'add-sub','c-a', 'done-edit', 'cansel-edit'
   ],
+  data() {
+    return {
+      menuItems: [
+        { label:"Add subtask", 
+          action: () => {this.$emit('menu-change', 'isAddingSub'); }
+        },
+        { label: computed(() => this.items.dueDate || "Установить Дату"),
+        // (this.items && this.items.repeat) ? this.items.repeat : "Повторять"
+          action: () => this.$emit('menu-change', 'isEditDate')
+        },
+        { label: computed(() => this.items.repeat || "Повторять"),
+        // (this.items && this.items.repeat) ? this.items.repeat : "Повторять"
+          action: () => this.$emit('menu-change', 'isEditCycle')
+        },
+      ],      
+    }
+  },
+  methods: {
+    addS(parentItem, title) {
+      this.$emit('add-sub', parentItem, title);
+    },
+    doneE(item, variable) {
+      this.$emit('done-edit', item, variable);
+    },
+    canselE(variable) { 
+      this.$emit('cansel-edit', variable);
+    },
+    cA() { this.$emit('c-a') }
+  }
 
 }
 </script>
 
 <style scoped>
-  .main-buttons, .menu-buttons, .item{
+  .main-buttons, .item{
     display: inline-block;
     margin-left: 5px;
   }
@@ -104,6 +126,8 @@ export default {
   background: rgba(0, 0, 0, 0.5);
   z-index: 3;
   padding: 10% 0 0;
+  font-size: 18px;
+  font-weight: 600;
 }
 .menu-content {
   left: 15px;
@@ -116,8 +140,7 @@ export default {
   flex-wrap: wrap;
   justify-content: start;
   align-items: start;
-  padding: 10px 20%;
-  /* box-sizing: border-box; */
+  padding: 10px 5%;
 }
 .task-info-menu button, .item-title{
   margin-right: 10px;

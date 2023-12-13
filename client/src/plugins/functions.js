@@ -26,8 +26,36 @@ function excludeOne (obj, exclude) {
   return result;
 }
 
+function setPaddingBasedOnOverflow() {
+  var body = document.body;
+
+  var bodyStyle = window.getComputedStyle(body);
+
+  if (bodyStyle.overflow === 'hidden') {
+      body.style.paddingRight = getScrollbarWidth() + 'px';
+  } else {
+      body.style.paddingRight = '0';
+  }
+}
+function getScrollbarWidth() {
+  var scrollDiv = document.createElement('div');
+  scrollDiv.style.width = '100px';
+  scrollDiv.style.height = '100px';
+  scrollDiv.style.overflow = 'scroll';
+  scrollDiv.style.position = 'absolute';
+  scrollDiv.style.top = '-9999px';
+
+  document.body.appendChild(scrollDiv);
+
+  var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+
+  document.body.removeChild(scrollDiv);
+
+  return scrollbarWidth;
+}
 
 
 window.excludeOne = excludeOne;
 window.getTomorrowDate = getTomorrowDate;
 window.getCustomDate = getCustomDate;
+window.setPaddingBasedOnOverflow = setPaddingBasedOnOverflow;
