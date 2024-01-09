@@ -11,14 +11,10 @@ export const useAuth = defineStore('auth', {
         const auth = getAuth();
         await signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
-            const user = userCredential.user; console.log(user);
+            const user = userCredential.user; // console.log(user);
           })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(errorCode, errorMessage)
-          });    
       } catch (e) {
+        console.error(e.code, e.message)
         throw e
       }
 
@@ -37,13 +33,11 @@ export const useAuth = defineStore('auth', {
       try {
         const response = await get(child(dbRef, `users/${userId}/Tasks`));
         const data = response.val();
-        // console.log( 'itmsFetch before ', useStructure().itmsFetch )
         if (data) {
           useStructure().setItems(data);
         } else {
           useStructure().setItems(JSON.parse(localStorage.getItem('to-do-list') || '[]'));
         }
-        // console.log( 'itmsFetch after ', useStructure().itmsFetch )
       } catch (error) {
         useStructure().setItems(JSON.parse(localStorage.getItem('to-do-list') || '[]'));
         console.error(error);

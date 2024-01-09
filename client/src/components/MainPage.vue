@@ -1,38 +1,40 @@
 <template>
   <div>
     <NavBar></NavBar>
-    <h2>Вже не Дуже паскудний планувальник завдань</h2>
-    <button hidden @click="upgradeFields(items, 'id','level','title','completed','prevCompleted','repeat','dueDate','subItems')">upgFiel</button>
-    <button 
-      @click="getUserData(UId)">
-      Send request
-    </button>
-    <input type="text" v-model="newTodoText" class="new-todo" 
-      style="margin: 0 5px 0 5px"
-      placeholder="Добавить Прооект"
-      @keyup.enter="addItem(items, newTodoText)">
-    <button class="projectAR" @click="addItem(items, newTodoText)">+</button>
-    <ul v-if="items" class="tree-item0" v-for="item, i of filteredTodos" :key="item.id">
-      <tree-item :items="item"  :underItem="filteredTodos" :index="i"> 
-        
-      </tree-item> 
-    </ul>
-    
-    <span class="todo-count">
-      <strong>{{ remaining }}</strong>
-      <span>{{ remaining > 4 || remaining === 0 ? ' завдань' : ' завдання' }} залишилося</span>
-    </span>
-    <ul class="filters">
-      <li>
-        <a href="#/all" :class="{ selected: visibility === 'all' }">Усі</a>
-      </li>
-      <li>
-        <a href="#/active" :class="{ selected: visibility === 'active' }">Активні</a>
-      </li>
-      <li>
-        <a href="#/completed" :class="{ selected: visibility === 'completed' }">Завершені</a>
-      </li>
-    </ul>    
+    <div class="main-wrap">
+      <h2>Вже не Дуже паскудний планувальник завдань</h2>
+      <button hidden @click="upgradeFields(items, 'id','level','title','completed','prevCompleted','repeat','dueDate','subItems')">upgFiel</button>
+      <button 
+        @click="getUserData(UId)">
+        Send request
+      </button>
+      <input type="text" v-model="newTodoText" class="new-todo" 
+        style="margin: 0 5px 0 5px"
+        placeholder="Добавить Прооект"
+        @keyup.enter="addItem(items, newTodoText)">
+      <button class="projectAR" @click="addItem(items, newTodoText)">+</button>
+      <ul v-if="items" class="tree-item0" v-for="item, i of filteredTodos" :key="item.id">
+        <tree-item :items="item"  :underItem="filteredTodos" :index="i"> 
+          
+        </tree-item> 
+      </ul>
+      
+      <span class="todo-count">
+        <strong>{{ remaining }}</strong>
+        <span>{{ remaining > 4 || remaining === 0 ? ' завдань' : ' завдання' }} залишилося</span>
+      </span>
+      <ul class="filters">
+        <li>
+          <a href="#/all" :class="{ selected: visibility === 'all' }">Усі</a>
+        </li>
+        <li>
+          <a href="#/active" :class="{ selected: visibility === 'active' }">Активні</a>
+        </li>
+        <li>
+          <a href="#/completed" :class="{ selected: visibility === 'completed' }">Завершені</a>
+        </li>
+      </ul>
+    </div>
   </div>
   <div>Як же я не люблю <b>Вю</b> <br>
     <button @click="cnsLg">log items</button>
@@ -130,7 +132,7 @@ export default {
     async writeUserData(items) {
       try {
           const response = await axios.post(`http://localhost:3000/todos/${this.UId}`, items);
-          console.log(`Data saved ${getCustomDate()}:`, response.data);
+          console.log(`Data saved ${getCustomDate()}-${useStructure().count++}:`, response.data);
         } catch (error) {
           console.error('Error saving data:', error);
         }
@@ -187,7 +189,7 @@ export default {
     window.addEventListener('hashchange', this.onHashChange)
     this.onHashChange()
     document.querySelector('body').style.backgroundColor='#ffffff'
-    // console.log('mounted: ',useStructure().items);
+    import('@/plugins/windowResize')
     
   },
 };
@@ -200,25 +202,4 @@ export default {
     margin-bottom: 5px;
   }
 
-  .current-user {
-    position: absolute;
-    top: 15px;
-    right: 10px;
-    background-color: #fbc000;
-    padding: 5px;
-    font-weight: bold;
-  }
-
-  /* .exit {
-    position: absolute;
-    top: 50px;
-    right: 5px;
-    border-radius: 1rem;
-    padding: 1em 0.5em;
-    background-color: #ff0000;
-    font-weight: 600;
-  } */
-  .exit:hover{
-    background-color: #fb0c0c;
-  }
 </style>

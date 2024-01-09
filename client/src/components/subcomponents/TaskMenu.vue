@@ -13,22 +13,13 @@
   @click.stop="$emit('toggle', '','isTaskMenuOpen')"   >
     <div class="menu-content" @click.stop> 
       <span class="item-title">{{ items.title }}</span>
-      <TaskProperties @done-edit="doneE" @cansel-edit="canselE" @add-sub="addS" @c-a="cA" />
+      <TaskProperties @done-edit="doneE" @cansel-edit="canselE" @add-sub="addS" @c-a="cA" @crutch="other"/>
       <button v-for="button in menuItems" :key="button.label" @click.stop="button.action">
         {{ button.label }}
       </button>
     </div>
   </div>
-  <!-- <div class="task-info-menu" v-if="isTaskMenuOpen&&type=='item'" 
-  @click.stop="$emit('toggle', '','isTaskMenuOpen')"   >
-    <div class="menu-content" @click.stop>
-      <span class="item-title">{{ items.title }}</span>
-      <button v-for="button in menuItems" :key="button.label" @click.stop="button.action">
-        {{ button.label }}
-      </button>
-    </div>
-  </div> -->
-
+  
   <div v-if="type=='item'" class="item">
     <button class="projectAR" @click="$emit('add-item', items, 'titleSubEl')">+</button>
     <button @click="$emit('remove-item', underItem, i)" class="remove-button">
@@ -76,7 +67,7 @@ export default {
     }
   },
   emits: ['toggle', 'remove-project', 'menu-change', 'add-item', 'remove-item', 
-    'date-edit', 'cycle-edit', 'add-sub','c-a', 'done-edit', 'cansel-edit'
+    'date-edit', 'cycle-edit', 'add-sub','c-a', 'done-edit', 'cansel-edit', 'crutch'
   ],
   data() {
     return {
@@ -105,7 +96,10 @@ export default {
     canselE(variable) { 
       this.$emit('cansel-edit', variable);
     },
-    cA() { this.$emit('c-a') }
+    cA() { this.$emit('c-a') },
+    other(variable) {
+      this.$emit('crutch', variable);
+    }
   }
 
 }

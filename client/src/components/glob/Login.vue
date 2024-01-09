@@ -94,12 +94,14 @@ export default {
         password: this.password
       }
       this.isSend = true;
-      
-        useAuth().login(formData).then((val) => {
-          this.isSend = false;
-        })
-        
-        
+      try {
+        await useAuth().login(formData)
+        this.isSend = false;
+        this.$router.push('/');
+      } catch(e){
+        this.isSend = false;
+        console.log('wrong auth')
+      }
     },
     logout() {
       useAuth().logout()

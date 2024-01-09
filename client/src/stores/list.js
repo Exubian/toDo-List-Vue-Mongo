@@ -20,13 +20,6 @@ export const useStructure = defineStore("structure", {
       const user = getAuth().currentUser;
       return user ? user.uid : null;
     },
-    async onAuthStateChanged(user) {
-      if (user) {
-        this.uid = (user.uid);
-      } else {
-        this.uid = (null);
-      }
-    },
     testM() {
       console.log('test method work');
     }

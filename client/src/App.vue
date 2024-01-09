@@ -1,10 +1,11 @@
 <template>
-  <component :is="layout"></component>
+  <component :is="layout">
+    <router-view/>
+  </component>
 </template>
 
 <script>
 import MainPage from '@/components/MainPage.vue';
-import { useStructure } from '@/stores/list';
 
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 import { useAuth } from '@/stores/auth';
@@ -22,9 +23,7 @@ export default {
   mounted() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      useStructure().onAuthStateChanged(auth.currentUser);
       if (user) {
-        // Пользователь аутентифицирован
         this.loading = true;
         useAuth().fetchDataFromMongo(user.uid)
         .then(() => {
@@ -32,7 +31,6 @@ export default {
         }).catch( () => { this.loading = false; } )
         
       } else {
-        // Пользователь не аутентифицирован
         this.user = null; this.loading = false;
       }
     })

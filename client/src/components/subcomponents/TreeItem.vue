@@ -12,18 +12,19 @@
         @remove-project="removeProject"
       />
       <TaskMenu type="menu" :isTaskMenuOpen="isTaskMenuOpen" 
-        :menuPosition="menuPosition" :isAddingSub="isAddingSub" :items="items"
+        :isAddingSub="isAddingSub" :items="items"
         @menu-change="onMenuChange" @toggle="toggle" @done-edit="doneEdit" 
-        @cansel-edit="canselEdit" @add-sub="addItem" @c-a="cA"
+        @cansel-edit="canselEdit" @add-sub="addItem" @c-a="cA" @crutch="crutch"
       />
     </div>
     <input v-if="isItemEdit"
       class="edit" :class="{proj : isItemEdit}" type="text" v-model="editedTodo.title"
       @vue:mounted="({ el }) => el.focus()"
-      @blur="doneEdit(items)"
+      
       @keyup.enter="doneEdit(items)"
       @keyup.escape="canselEdit()"
     />
+    <!-- @blur="doneEdit(items)" -->
     <hr>
   </ul>
 
@@ -45,8 +46,8 @@
     />
         
     <TaskMenu type="item" :items="items" :underItem="underItem" :i="index" 
-      :isTaskMenuOpen="isTaskMenuOpen" :menuPosition="menuPosition"
-      @add-item="addItem" @remove-item="removeItem" @menu-change="onMenuChange" @toggle="toggle" 
+      :isTaskMenuOpen="isTaskMenuOpen" @add-item="addItem" @remove-item="removeItem" 
+      @menu-change="onMenuChange" @toggle="toggle" 
       @done-edit="doneEdit" @cansel-edit="canselEdit" @add-sub="addItem"  
     />
     <hr>
@@ -67,7 +68,7 @@
 import { computed } from 'vue';
 import TreeItem from './TreeItem.vue';
 import TaskMenu from './TaskMenu.vue'
-import { repeatStatuses } from '@/plugins/types';
+import { RepeatStatuses } from '@/plugins/repeatStatuses';
 
 export default {
   name: 'TreeItem',
@@ -90,11 +91,6 @@ export default {
   },
   data() {
     return {
-      menuPosition: {
-        top: 0,
-        left: 0
-      },
-      // newTodoText: "",
       isOpen: false,
       editedTodo: null,
       isItemEdit: false,
@@ -102,7 +98,7 @@ export default {
       isEditDate: false,
       isEditCycle: false,
       isAddingSub: false,
-      repeatStatuses: repeatStatuses
+      repeatStatuses: new RepeatStatuses()
     };
   },
   provide() { 
@@ -218,6 +214,9 @@ export default {
       }
     },
     
+    crutch(variable) {
+      this[variable] = false;
+    }
   },
   computed: {
     isProject() {

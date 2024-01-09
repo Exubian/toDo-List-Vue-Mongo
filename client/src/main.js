@@ -5,6 +5,7 @@ import './style.css';
 import '/src/plugins/functions.js'
 import App from './App.vue';
 import components from '@/components/glob'
+import router from '@/router/router'
 import dateFilter from '@/filters/dateFilter'
 
 import { initializeApp } from 'firebase/app';
@@ -17,24 +18,20 @@ const fb = initializeApp(
 );
 const auth = getAuth(fb);
 
-const pinia = createPinia();
-let app = createApp(App);
-app.use(pinia);
-components.forEach(compon => {
-  app.component(compon.name, compon)
-});
-app.config.globalProperties.$auth = auth;
-app.config.globalProperties.$filters = {dateFilter};
-app.mount('#app');
+let app;
 
 onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Veryfied") //, user
-  } else {
-    console.log("Signed out")
+  if (!app) {
+    const pinia = createPinia();
+    app = createApp(App);
+    app.use(pinia);
+    app.use(router)
+    components.forEach(compon => {
+      app.component(compon.name, compon)
+    });
+    app.config.globalProperties.$auth = auth;
+    app.config.globalProperties.$filters = {dateFilter};
+    app.mount('#app');
   }
+  (user) ? console.log("Veryfied") : console.log("Signed out") //, user
 })
-
-
-
-

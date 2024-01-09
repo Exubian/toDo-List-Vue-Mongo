@@ -2,9 +2,6 @@
   <nav class="navbar orange lighten-1">
     <div class="nav-wrapper">
       <div class="navbar-left">
-        <!-- <a href="" @click.prevent="$emit('click')">
-          <i class="material-icons black-text">dehaze</i>
-        </a> -->
         <span class="black-text">{{ $filters.dateFilter(date, 'datetime') }}</span>
       </div>
 
@@ -53,8 +50,7 @@ export default {
   methods: {
     logout() {
       useAuth().logout();
-      console.log('Log out')
-      // this.$router.push('/login?message=logout')
+      this.$router.push('/login?message=logout')
     }
   },
   mounted() {
@@ -98,12 +94,6 @@ export default {
     right: 0;
   }
   .black-text{
-    font-weight: 600;
-  }
-  .exit {
-    background-color: #ff0000;
-    border-radius: 1rem;
-    padding: 1em 0.5em;
     font-weight: 600;
   }
 
