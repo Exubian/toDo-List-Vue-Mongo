@@ -6,7 +6,7 @@
       <input class="toggle" type="checkbox" v-model="items.completed" 
         @change="updateCompletedStatus(items)"
       />
-      <span class="" @click="editItem(items)" @dblclick="editItem(items)">{{ items.title }}</span>
+      <span class="" @click="editItem(items)" >{{ items.title }}</span>
       <TaskMenu type="main" :underItem="underItem" :i="index" 
         :isOpen="isOpen" :isAddingSub="isAddingSub" @toggle="toggle" 
         @remove-project="removeProject"
@@ -33,8 +33,8 @@
     L {{ items.level }}
     <input class="toggle" type="checkbox" v-model="items.completed" 
       @change="updateCompletedStatus(items)"/>
-    <span class="item-title " v-show="!isItemEdit" @click="editItem(items, 'isItemEdit')"
-      @dblclick="editItem(items, 'isItemEdit')">{{items.title || '...'}}
+    <span class="item-title " v-show="!isItemEdit" @click="editItem(items, 'isItemEdit')">
+      {{items.title || '...'}}
     </span>
     <input v-if="isItemEdit"
       class="edit" type="text"
@@ -68,7 +68,6 @@
 import { computed } from 'vue';
 import TreeItem from './TreeItem.vue';
 import TaskMenu from './TaskMenu.vue'
-import { RepeatStatuses } from '@/plugins/repeatStatuses';
 
 export default {
   name: 'TreeItem',
@@ -98,7 +97,6 @@ export default {
       isEditDate: false,
       isEditCycle: false,
       isAddingSub: false,
-      repeatStatuses: new RepeatStatuses()
     };
   },
   provide() { 
@@ -107,7 +105,6 @@ export default {
       isEditDate: computed(() => this.isEditDate),
       isEditCycle: computed(() => this.isEditCycle),
       isAddingSub: computed(() => this.isAddingSub),
-      repeatStatuses: computed(() => this.repeatStatuses),
       editedTodo: computed(() => this.editedTodo),
       items: computed(() => this.items)
     }
@@ -128,17 +125,16 @@ export default {
         id: maxId,
         level: this.items.level+1,
         title: title,
+        description: '',
         completed: false,
         prevCompleted: false,
-        repeat: null,
+        repeat: { title: 'однократно', value: 'once'},
         dueDate: getTomorrowDate(),
         subItems: [],
       };
       parentItem.subItems.push(newItem);
 
-      // this.newTodoText="";
       this.isAddingSub = false;
-      if (this.isProject == false) this.isProject = true;
     },
 
     removeProject(parentItem, i) {
@@ -240,7 +236,7 @@ export default {
   }
 
   .tree-item {
-    margin: 9px 0px 0px 10px;
+    margin: 9px 0px 0px 0px;
     background-color: #cadafd;
   }
 
@@ -248,7 +244,7 @@ export default {
   input[type="checkbox"].toggle:checked {
     margin-top: 0.9em;
     pointer-events: auto;
-    opacity: 0;
+    /* opacity: 0; */
     z-index: 1;
   }
   input[type="checkbox"].toggle + span:before,

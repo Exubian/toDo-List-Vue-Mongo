@@ -1,6 +1,8 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import 'materialize-css/dist/js/materialize.min'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min'
+import '@popperjs/core/dist/esm/'
 import './style.css';
 import '/src/plugins/functions.js'
 import App from './App.vue';

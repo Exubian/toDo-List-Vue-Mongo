@@ -1,24 +1,22 @@
 <template>
-  <nav class="navbar orange lighten-1">
-    <div class="nav-wrapper">
+  <nav class="navbar navbar-expand-lg bg-warning">
+    <div class="container-fluid">
       <div class="navbar-left">
         <span class="black-text">{{ $filters.dateFilter(date, 'datetime') }}</span>
       </div>
 
-      <ul class="right hide-on-small-and-down">
-        <li>
-          <a class="dropdown-trigger black-text"
-            href="" data-target="dropdown" ref="dropdown"
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item dropdown bg-light rounded-3">
+          <a class="nav-link dropdown-toggle black-text"
+            href="" role="button" data-bs-toggle="dropdown" aria-expanded="false"
           >
           {{ UId || '{anonymys}' }}
-            <i class="material-icons right">arrow_drop_down</i>
           </a>  
 
-          <ul id='dropdown' class='dropdown-content'>
-            
+          <ul class='dropdown-menu'>
             <li>
-              <a href="" @click.prevent="logout">
-                <i class="material-icons">assignment_return</i>Выйти
+              <a class="dropdown-item" href="" @click.prevent="logout">
+                <i class="material-icons">assignment_return</i> Выйти
               </a>
             </li>
 
@@ -57,9 +55,9 @@ export default {
     this.interval = setInterval(() => {
       this.date = new Date()
     }, 1000)
-    this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
+    /* this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
       constrainWidth: false
-    })
+    }) */
   },
   beforeDestroy() {
     clearInterval(this.interval)
@@ -70,28 +68,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .navbar {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 64px !important;
+    margin-bottom: 1em;
     padding: 0 2rem;
     z-index: 1;
-  }
-  .nav-wrapper,
-  .navbar-left {
-    justify-content: space-between;
-    display: flex;
-    align-items: center
-  }
-  .navbar-left>a {
-    margin-right: 1rem
-  }
-  .right.hide-on-small-and-down {
-    position: absolute;
-    right: 0;
   }
   .black-text{
     font-weight: 600;

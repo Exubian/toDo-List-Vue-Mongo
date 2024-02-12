@@ -1,9 +1,12 @@
+import { cloneDeep } from 'lodash';
 import './dateFunc';
+
 function excludeOne (obj, exclude) {
   const result = {};
-  for (let key in obj) {
+  const tempObj = cloneDeep(obj);
+  for (let key in tempObj) {
     if (key !== exclude) {
-      result[key] = obj[key];
+      result[key] = tempObj[key];
     }
   }
   return result;
@@ -45,9 +48,47 @@ function isScroll(a='Height') {
   return /CSS/.test(d.compatMode)? (e[c]< e[a]) : (b[c]< b[a])
 };
 
+function customSort(opt){
+  function customComparator(a, b) {
+    const typeA = typeof a;
+
+    if (typeA === 'number' || !isNaN(a)) {
+      return a - b; // Сортировка чисел от меньшего к большему
+    } else if(opt == 'week-day') {
+      return getIndexDate(opt, a) - getIndexDate(opt, b)
+    } else if (opt == 'month') {
+      return getIndexDate(opt, a) - getIndexDate(opt, b)
+    } else if (opt == 'word') {
+      return getIndexDate(opt, a) - getIndexDate(opt, b)
+    }  else if (typeA === 'string') {
+      return a.localeCompare(b); // Сортировка строк по лексикографии
+    }
+  }
+  this.sort(customComparator)
+  return this
+}
+function getIndexDate(opt, value) {
+  const mapWeekDays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
+  const mapMonths = [ "январь", "февраль", "март", "апрель", "май", "июнь", "июль", 
+    "август", "сентябрь", "октябрь", "ноябрь", "декабрь"
+  ]
+  const mapWeekOrder = ['Первая', 'Вторая', 'Третья', 'Четвёртая', 'Последняя']
+
+  switch (opt) {
+    case 'week-day':
+      return mapWeekDays.indexOf(value)
+    case 'month':
+      return mapMonths.indexOf(value)
+    case 'word':
+      return mapWeekOrder.indexOf(value)
+    default:
+      break;
+  }
+}
 
 
 window.excludeOne = excludeOne;
 window.setPaddingBasedOnOverflow = setPaddingBasedOnOverflow;
 window.getScrollbarWidth = getScrollbarWidth;
 window.isScroll = isScroll;
+Array.prototype.customSort = customSort

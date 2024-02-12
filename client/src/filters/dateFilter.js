@@ -2,6 +2,12 @@ export default function dateFilter(value, format='date') {
   const options = {};
   if (format == 'day') {
     options.weekday = 'long'
+  }
+  if (format == 'day-short') {
+    options.weekday = 'short'
+  }
+  if (format == 'num') {
+    options.day = '2-digit'
   } else {
   if (format.includes('date')) {
     options.day = '2-digit';

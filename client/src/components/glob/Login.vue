@@ -45,12 +45,13 @@
       </div>
     </div>
     <div class="card-action">
-      <Loading v-if="isSend" :type="'in'" />
-      <div v-else>
+      
+      <div>
         <button
             class="btn waves-effect waves-light auth-submit"
             type="submit"
         >
+        <Loading v-if="isSend" :type="'in'" />
           Войти
           <i class="material-icons right">send</i>
         </button>
@@ -79,9 +80,7 @@ export default {
     }
   },
   mounted() {
-    // if (messages[this.$route.query.message]) {
-    //   this.$message(messages[this.$route.query.message])
-    // }
+    // add message from url
   },
   methods: {
     async submitHandler() {

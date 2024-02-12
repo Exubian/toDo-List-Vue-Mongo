@@ -3,9 +3,10 @@
     <NavBar></NavBar>
     <div class="main-wrap">
       <h2>Вже не Дуже паскудний планувальник завдань</h2>
-      <button hidden @click="upgradeFields(items, 'id','level','title','completed','prevCompleted','repeat','dueDate','subItems')">upgFiel</button>
-      <button 
-        @click="getUserData(UId)">
+      <button @click="upgradeFields(items)">
+        upgFiel
+      </button>
+      <button @click="getUserData(UId)">
         Send request
       </button>
       <input type="text" v-model="newTodoText" class="new-todo" 
@@ -13,12 +14,12 @@
         placeholder="Добавить Прооект"
         @keyup.enter="addItem(items, newTodoText)">
       <button class="projectAR" @click="addItem(items, newTodoText)">+</button>
-      <ul v-if="items" class="tree-item0" v-for="item, i of filteredTodos" :key="item.id">
-        <tree-item :items="item"  :underItem="filteredTodos" :index="i"> 
-          
-        </tree-item> 
-      </ul>
-      
+      <div class="tasks-block mt-3">
+        <ul v-if="items" class="tree-item0" v-for="item, i of filteredTodos" :key="item.id">
+          <tree-item :items="item"  :underItem="filteredTodos" :index="i"> 
+          </tree-item> 
+        </ul>
+      </div>
       <span class="todo-count">
         <strong>{{ remaining }}</strong>
         <span>{{ remaining > 4 || remaining === 0 ? ' завдань' : ' завдання' }} залишилося</span>
@@ -36,9 +37,11 @@
       </ul>
     </div>
   </div>
-  <div>Як же я не люблю <b>Вю</b> <br>
+  <div class="left-hang" v-if="logVisible" @click.right.prevent="logVisible=false">
+    <p>Вцілому </p><p>не скаржусь</p> на <b>Вю</b> <br>
     <button @click="cnsLg">log items</button>
-  </div>
+  </div> 
+  <div class="replacement" v-if="!logVisible" @click="logVisible=true"></div>
 </template>
 
 <script>
@@ -48,7 +51,9 @@ const filters = {
   active: (items) => items.filter((item) => !item.completed),
   completed: (items) => items.filter((item) => item.completed)
 }
-
+const fieldsArr = ['id','level','title','description','completed','prevCompleted','repeat',
+  'dueDate','subItems'
+]
 
 import TreeItem from './subcomponents/TreeItem.vue';
 import { useStructure } from '/src/stores/list';
@@ -67,7 +72,8 @@ export default {
       items: useStructure().items,
       level: 0,
       newTodoText: "",
-      visibility: 'all'
+      visibility: 'all',
+      logVisible : true
     };
   },
   watch: {
@@ -103,9 +109,10 @@ export default {
         id: maxId,
         level: 1,
         title: title || 'Project № '+maxId,
+        description: '',
         completed: false,
         prevCompleted: false,
-        repeat: null,
+        repeat: { title: 'однократно', value: 'once' },
         dueDate: new Date(Date.now()+86400*1000),
         subItems: [],
       };
@@ -158,14 +165,28 @@ export default {
     },
     
     upgradeFields(obj, ...fields) {
-      
+      fields.length ? fields : fields = fieldsArr
       for (let i = 0; i < fields.length; i++) {
         if (Array.isArray(obj)) {
           for (let task of obj) {
-            if (!task.subItems) { 
-              task.subItems = [] };
-            if (!Object.keys(task).includes(fields[i]) ||task[fields[i]]=='unSet') task[fields[i]] = '';
-          }
+            if (!task.subItems || !Array.isArray(task.subItems)) { 
+              task.subItems = [] 
+            };
+            if( typeof task.repeat !== 'object' || task.repeat===null ) {
+              task.repeat = {}
+              task.repeat.title = "однократно"
+              task.repeat.value = {}
+            } 
+            if (!task.repeat.title) {
+              task.repeat.title = "однократно"
+            }
+            if (!task.repeat.value || typeof task.repeat.value!='object') {
+              task.repeat.value = {};
+            }
+            if (!Object.keys(task).includes(fields[i]) ||task[fields[i]]=='unSet') {
+              task[fields[i]] = '';
+            }
+          }  // recursion call
           if (obj[i]?.subItems?.length)this.upgradeFields( obj[i].subItems, ...fields )
         } 
         else if (!Object.keys(obj).includes(fields[i])) {
@@ -177,6 +198,36 @@ export default {
         };
       }
       if (obj.subItems?.length) this.upgradeFields( obj.subItems, ...fields);
+    },
+    upgradeFields2(obj, ...fields) {
+      if (Array.isArray(obj)) {
+        for (let task of obj) {
+          if (!task.subItems) {
+            task.subItems = [];
+          }
+          for (let field of fields) {
+            if (!Object.keys(task).includes(field) || task[field] === 'unSet') {
+              task[field] = '';
+            }
+          }
+          if (task.subItems.length) {
+            this.upgradeFields2(task.subItems, ...fields);
+          }
+        }
+      } else {
+        for (let field of fields) {
+          if (field === 'subItems' && !Array.isArray(obj[field])) {
+            obj[field] = [];
+          } else if (field === 'repeat' && typeof obj[field] !== 'object') {
+            obj[field] = {};
+          } else if (!Object.keys(obj).includes(field)) {
+            obj[field] = '';
+          }
+        }
+        if (obj.subItems?.length) {
+          this.upgradeFields2(obj.subItems, ...fields);
+        }
+      }
     },
     
     logout() {
@@ -200,6 +251,23 @@ export default {
   .tree-item0 {
     border: 2px solid red;
     margin-bottom: 5px;
+  }
+  .left-hang {
+    position: absolute;
+    left: 1%;
+    bottom: 50%;
+    display: inline-block;
+  }
+  .left-hang p {
+    margin-bottom: 0;
+  }
+  .replacement {
+    position: fixed;
+    top: 50%;
+    left: 1%;
+    height: 3rem;
+    width: 3rem;
+    background-color: #4e82e1;
   }
 
 </style>

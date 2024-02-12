@@ -1,7 +1,7 @@
 import MainPage from '@/components/MainPage.vue';
 import Login from '@/components/glob/Login.vue';
 import Settings from '@/components/glob/Settings.vue';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 import { createRouter, createWebHistory } from 'vue-router';
 

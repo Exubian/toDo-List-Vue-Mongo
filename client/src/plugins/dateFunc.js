@@ -22,8 +22,27 @@ function getCustomDate(format='date') {
   return `${date.getHours()}:${date.getMinutes()}`;
 }
 
+function getFullDayName(abbreviatedDay) {
+  const daysMap = {
+      'пн': 'понедельник',
+      'вт': 'вторник',
+      'ср': 'среда',
+      'чт': 'четверг',
+      'пт': 'пятница',
+      'сб': 'суббота',
+      'вс': 'воскресенье'
+  };
 
+  const lowerAbbreviation = abbreviatedDay.toLowerCase();
+
+  if (daysMap.hasOwnProperty(lowerAbbreviation)) {
+      return daysMap[lowerAbbreviation];
+  } else {
+      return 'Invalid day abbreviation';
+  }
+}
 
 
 window.getTomorrowDate = getTomorrowDate;
 window.getCustomDate = getCustomDate;
+window.getFullDayName = getFullDayName;

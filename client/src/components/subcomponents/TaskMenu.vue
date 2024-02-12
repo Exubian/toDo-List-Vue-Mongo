@@ -1,6 +1,10 @@
 <template>
   <div v-if="type=='main' && !isAddingSub" class="main-buttons">
-    <button class="toggle-button" @click="$emit('toggle', true)">{{ isOpen ? '▽' : '▶' }}</button>
+    <button class="toggle-button" @click="$emit('toggle', true)">
+      <span class="material-symbols-outlined">
+        {{ isOpen ? '▽' : ' > ' }}
+      </span>
+    </button>
     <button class="remove-button" @click="$emit('removeProject', underItem, i)">
       <i class="small material-icons">clear</i>
     </button>
@@ -13,7 +17,9 @@
   @click.stop="$emit('toggle', '','isTaskMenuOpen')"   >
     <div class="menu-content" @click.stop> 
       <span class="item-title">{{ items.title }}</span>
-      <TaskProperties @done-edit="doneE" @cansel-edit="canselE" @add-sub="addS" @c-a="cA" @crutch="other"/>
+      <TaskProperties v-if="isEditProperties"
+        @done-edit="doneE" @cansel-edit="canselE" @add-sub="addS" @c-a="cA" @crutch="other"
+      />
       <button v-for="button in menuItems" :key="button.label" @click.stop="button.action">
         {{ button.label }}
       </button>
@@ -71,17 +77,25 @@ export default {
   ],
   data() {
     return {
+      isEditProperties: false,
       menuItems: [
         { label:"Add subtask", 
-          action: () => {this.$emit('menu-change', 'isAddingSub'); }
+          action: () => {
+            this.$emit('menu-change', 'isAddingSub');
+            this.isEditProperties = true
+          }
         },
         { label: computed(() => this.items.dueDate || "Установить Дату"),
-        // (this.items && this.items.repeat) ? this.items.repeat : "Повторять"
-          action: () => this.$emit('menu-change', 'isEditDate')
+          action: () => {
+            this.$emit('menu-change', 'isEditDate')
+            this.isEditProperties = true
+          }
         },
-        { label: computed(() => this.items.repeat || "Повторять"),
-        // (this.items && this.items.repeat) ? this.items.repeat : "Повторять"
-          action: () => this.$emit('menu-change', 'isEditCycle')
+        { label: computed(() => this.items.repeat.title || this.items.repeat || "Повторять"),
+          action: () => {
+            this.$emit('menu-change', 'isEditCycle')
+            this.isEditProperties = true
+          }
         },
       ],      
     }
@@ -89,16 +103,24 @@ export default {
   methods: {
     addS(parentItem, title) {
       this.$emit('add-sub', parentItem, title);
+      this.toggle();
     },
     doneE(item, variable) {
       this.$emit('done-edit', item, variable);
+      this.toggle();
     },
     canselE(variable) { 
       this.$emit('cansel-edit', variable);
+      this.toggle();
     },
-    cA() { this.$emit('c-a') },
+    cA() { this.$emit('c-a'); this.toggle() },
     other(variable) {
       this.$emit('crutch', variable);
+      this.isEditProperties = false;
+    },
+
+    toggle(variable = 'isEditProperties') {
+      this[variable] = !this[variable];
     }
   }
 
@@ -134,7 +156,7 @@ export default {
   flex-wrap: wrap;
   justify-content: start;
   align-items: start;
-  padding: 10px 5%;
+  padding: 10px 1% 0 3%;
 }
 .task-info-menu button, .item-title{
   margin-right: 10px;
